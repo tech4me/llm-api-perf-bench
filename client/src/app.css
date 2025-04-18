@@ -1,0 +1,53 @@
+/* Reset some default styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Make sure the app container fills the viewport */
+.app-container {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Component container for the three main sections */
+.component-container {
+  display: flex;
+  width: 100%;
+  height: calc(100% - 5rem);
+  overflow: hidden;
+}
+
+/* Individual component styling */
+.component {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  border-right: 1px solid var(--border);
+}
+
+.component:last-child {
+  border-right: none;
+}
+
+/* Specific component customizations if needed */
+.vendor-list {
+  min-width: 25%;
+}
+
+.past-measurements {
+  min-width: 35%;
+}
+
+.measurement-session {
+  min-width: 40%;
+}
+
+/* Button styling */
+button {
+  transition: background-color 0.3s ease;
+}
