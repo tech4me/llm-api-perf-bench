@@ -22,7 +22,8 @@
     },
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "start": "vite preview"
     },
     "devDependencies": {
         "@tailwindcss/postcss": "^4.1.4",
