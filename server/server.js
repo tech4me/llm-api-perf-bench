@@ -6,6 +6,12 @@ const app = express();
 const prisma = new PrismaClient();
 const { auth } = require('./auth');
 
+// Logging middleware
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
+  next();
+});
+
 // Middleware
 app.use(cors({
   origin: process.env.CLIENT_URL || 'http://localhost:5173',
@@ -16,7 +22,6 @@ app.use(cors({
 app.all("/api/auth/*", toNodeHandler(auth));
 
 app.use(express.json());
-
 
 // Middleware to check for authentication
 const requireAuth = async (req, res, next) => {
