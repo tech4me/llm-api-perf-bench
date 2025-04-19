@@ -3,7 +3,6 @@ const { PrismaClient } = require('@prisma/client');
 const cors = require('cors');
 const { fromNodeHeaders, toNodeHandler } = require("better-auth/node");
 const app = express();
-const PORT = 3000;
 const prisma = new PrismaClient();
 const { auth } = require('./auth');
 
@@ -167,6 +166,7 @@ app.delete('/api/vendors/:id/metrics', requireAuth, async (req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
