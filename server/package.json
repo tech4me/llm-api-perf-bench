@@ -17,5 +17,10 @@
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
+  },
+  "overrides": {
+    "better-auth": {
+      "better-call": "github:tech4me/better-call#main"
+    }
   }
 }
