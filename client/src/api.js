@@ -1,9 +1,17 @@
 // API functions for LLM Measurement Tool
 
+// Base API URL
+const API_URL = 'http://localhost:3000';
+
+// Common fetch options
+const fetchOptions = {
+  credentials: 'include', // Include credentials for authentication
+};
+
 // Fetch all API vendors
 export const fetchVendors = async () => {
   try {
-    const response = await fetch('http://localhost:3000/api/vendors');
+    const response = await fetch(`${API_URL}/api/vendors`, fetchOptions);
     if (!response.ok) {
       throw new Error('Failed to fetch vendors');
     }
@@ -17,7 +25,8 @@ export const fetchVendors = async () => {
 // Add a new API vendor
 export const addVendor = async (vendor) => {
   try {
-    const response = await fetch('http://localhost:3000/api/vendors', {
+    const response = await fetch(`${API_URL}/api/vendors`, {
+      ...fetchOptions,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(vendor),
@@ -35,7 +44,8 @@ export const addVendor = async (vendor) => {
 // Delete an API vendor
 export const deleteVendor = async (id) => {
   try {
-    const response = await fetch(`http://localhost:3000/api/vendors/${id}`, {
+    const response = await fetch(`${API_URL}/api/vendors/${id}`, {
+      ...fetchOptions,
       method: 'DELETE',
     });
     if (!response.ok) {
@@ -51,7 +61,7 @@ export const deleteVendor = async (id) => {
 // Fetch all performance metrics
 export const fetchMetrics = async () => {
   try {
-    const response = await fetch('http://localhost:3000/api/metrics');
+    const response = await fetch(`${API_URL}/api/metrics`, fetchOptions);
     if (!response.ok) {
       throw new Error('Failed to fetch metrics');
     }
@@ -65,7 +75,8 @@ export const fetchMetrics = async () => {
 // Delete a specific metric
 export const deleteMetric = async (id) => {
   try {
-    const response = await fetch(`http://localhost:3000/api/metrics/${id}`, {
+    const response = await fetch(`${API_URL}/api/metrics/${id}`, {
+      ...fetchOptions,
       method: 'DELETE',
     });
     if (!response.ok) {
@@ -81,7 +92,8 @@ export const deleteMetric = async (id) => {
 // Delete all metrics for a specific vendor
 export const deleteVendorMetrics = async (apiVendorId) => {
   try {
-    const response = await fetch(`http://localhost:3000/api/vendors/${apiVendorId}/metrics`, {
+    const response = await fetch(`${API_URL}/api/vendors/${apiVendorId}/metrics`, {
+      ...fetchOptions,
       method: 'DELETE',
     });
     if (!response.ok) {
@@ -272,7 +284,8 @@ export const invokeLLM = async (prompt, apiVendorId, onChunk = null) => {
     };
     
     // Send metrics to our server
-    await fetch('http://localhost:3000/api/metrics', {
+    await fetch(`${API_URL}/api/metrics`, {
+      ...fetchOptions,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(metrics),

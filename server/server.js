@@ -1,16 +1,38 @@
 const express = require('express');
-const { PrismaClient } = require('./generated/prisma');
+const { PrismaClient } = require('@prisma/client');
 const cors = require('cors');
+const { fromNodeHeaders, toNodeHandler } = require("better-auth/node");
 const app = express();
 const PORT = 3000;
 const prisma = new PrismaClient();
+const { auth } = require('./auth');
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  credentials: true
+}));
+
+// Use Better Auth middleware
+app.all("/api/auth/*", toNodeHandler(auth));
+
 app.use(express.json());
 
-// API Vendors Endpoints
-app.get('/api/vendors', async (req, res) => {
+
+// Middleware to check for authentication
+const requireAuth = async (req, res, next) => {
+  const session = await auth.api.getSession({
+    headers: fromNodeHeaders(req.headers),
+  });
+  if (!session) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  req.user = session.user;
+  next();
+};
+
+// API Vendors Endpoints - Protected
+app.get('/api/vendors', requireAuth, async (req, res) => {
   try {
     const vendors = await prisma.apiVendor.findMany();
     res.json(vendors);
@@ -20,7 +42,7 @@ app.get('/api/vendors', async (req, res) => {
   }
 });
 
-app.post('/api/vendors', async (req, res) => {
+app.post('/api/vendors', requireAuth, async (req, res) => {
   try {
     const { name, url, apiKey, modelName } = req.body;
     const vendor = await prisma.apiVendor.create({
@@ -38,7 +60,7 @@ app.post('/api/vendors', async (req, res) => {
   }
 });
 
-app.put('/api/vendors/:id', async (req, res) => {
+app.put('/api/vendors/:id', requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
     const { name, url, apiKey, modelName } = req.body;
@@ -58,7 +80,7 @@ app.put('/api/vendors/:id', async (req, res) => {
   }
 });
 
-app.delete('/api/vendors/:id', async (req, res) => {
+app.delete('/api/vendors/:id', requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
     
@@ -79,8 +101,8 @@ app.delete('/api/vendors/:id', async (req, res) => {
   }
 });
 
-// Performance Metrics Endpoints
-app.get('/api/metrics', async (req, res) => {
+// Performance Metrics Endpoints - Protected
+app.get('/api/metrics', requireAuth, async (req, res) => {
   try {
     const metrics = await prisma.performanceMetric.findMany({
       include: { apiVendor: true },
@@ -92,7 +114,7 @@ app.get('/api/metrics', async (req, res) => {
   }
 });
 
-app.post('/api/metrics', async (req, res) => {
+app.post('/api/metrics', requireAuth, async (req, res) => {
   try {
     const { apiVendorId, timeToFirstToken, tokensPerSecond } = req.body;
     
@@ -118,7 +140,7 @@ app.post('/api/metrics', async (req, res) => {
   }
 });
 
-app.delete('/api/metrics/:id', async (req, res) => {
+app.delete('/api/metrics/:id', requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
     await prisma.performanceMetric.delete({
@@ -131,7 +153,7 @@ app.delete('/api/metrics/:id', async (req, res) => {
   }
 });
 
-app.delete('/api/vendors/:id/metrics', async (req, res) => {
+app.delete('/api/vendors/:id/metrics', requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
     await prisma.performanceMetric.deleteMany({
@@ -141,51 +163,6 @@ app.delete('/api/vendors/:id/metrics', async (req, res) => {
   } catch (error) {
     console.error('Error deleting vendor metrics:', error);
     res.status(500).json({ error: 'Failed to delete vendor metrics' });
-  }
-});
-
-// Original LLM API endpoint
-app.post('/api/llm', async (req, res) => {
-  const { prompt, apiVendorId } = req.body;
-  
-  try {
-    // Mock LLM response for now
-    // In a real implementation, you would use the vendor info to make the API call
-    const vendor = await prisma.apiVendor.findUnique({
-      where: { id: apiVendorId },
-    });
-    
-    if (!vendor) {
-      return res.status(404).json({ error: 'Vendor not found' });
-    }
-    
-    const startTime = Date.now();
-    
-    // Simulate API call (replace with actual API call)
-    setTimeout(async () => {
-      const endTime = Date.now();
-      const responseTime = endTime - startTime;
-      
-      // Create a performance metric
-      await prisma.performanceMetric.create({
-        data: {
-          apiVendorId: vendorId,
-          timeToFirstToken: responseTime,
-          tokensPerSecond: 10, // Mock tokens per second
-        },
-      });
-      
-      res.json({
-        response: `Response to: "${prompt}". This is a mock response from ${vendor.name}.`,
-        metrics: {
-          timeToFirstToken: responseTime,
-          tokensPerSecond: 10,
-        }
-      });
-    }, 500); // Simulate processing time
-  } catch (error) {
-    console.error('Error processing LLM request:', error);
-    res.status(500).json({ error: 'Failed to process request' });
   }
 });
 

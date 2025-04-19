@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -28,15 +27,84 @@ model ApiVendor {
 }
 
 model PerformanceMetric {
-  id                String   @id @default(uuid())
-  timeToFirstToken  Float    // in milliseconds
-  tokensPerSecond   Float
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  id               String   @id @default(uuid())
+  timeToFirstToken Float // in milliseconds
+  tokensPerSecond  Float
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   // Relation to API vendor
-  apiVendorId       String
-  apiVendor         ApiVendor @relation(fields: [apiVendorId], references: [id])
+  apiVendorId String
+  apiVendor   ApiVendor @relation(fields: [apiVendorId], references: [id])
 
   @@index([apiVendorId])
+}
+
+// User model for authentication
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  image     String?
+  githubId  String?  @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relation to sessions
+  sessions      Session[]
+  emailVerified Boolean
+  accounts      Account[]
+
+  @@map("user")
+}
+
+// Session model for authentication
+
+model Session {
+  id        String   @id @default(uuid())
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  // Relation to user
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  token     String
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+
+  @@index([userId])
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
 }
