@@ -7,6 +7,7 @@ const prisma = new PrismaClient();
 
 // Create the auth instance
 const auth = betterAuth({
+  basePath: '/api/auth',
   // Database configuration
   database: prismaAdapter(prisma, {
     provider: "postgresql",
