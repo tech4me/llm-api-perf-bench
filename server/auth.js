@@ -30,11 +30,19 @@ const auth = betterAuth({
       maxAge: 5 * 60 // Cache duration of 5 minutes
     },
     cookie: {
-      name: 'auth_session',
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-      maxAge: 60 * 60 * 24 * 7 * 1000 // 7 days in milliseconds
+      secure: true,
+      sameSite: "none",
+      path: "/",
     }
+  },
+  advanced: {
+    crossSubDomainCookies: {
+      enabled: true,
+    }
+  },
+  defaultCookieAttributes: {
+    secure: true,
+    sameSite: "none"
   }
 });
 
