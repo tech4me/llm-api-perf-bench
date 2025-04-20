@@ -32,9 +32,20 @@ export default function Register() {
       }
       
       // Refresh session to update auth context
-      await refreshSession();
+      const sessionData = await refreshSession();
       
-      // Navigate to the home page (user is auto-signed in by default)
+      if (!sessionData || !sessionData.user) {
+        // If session isn't available yet, wait a bit and try again
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        const retrySession = await refreshSession();
+        
+        if (!retrySession || !retrySession.user) {
+          throw new Error('Failed to establish session');
+        }
+      }
+      
+      // Log success and navigate to home page
+      console.log('Registration successful, navigating to home');
       navigate('/', { replace: true });
     } catch (err) {
       setError(err.message || 'Registration failed');

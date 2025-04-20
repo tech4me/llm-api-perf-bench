@@ -35,9 +35,20 @@ export default function Login() {
       }
       
       // Refresh session to update auth context
-      await refreshSession();
+      const sessionData = await refreshSession();
       
-      // Navigate to the page user tried to visit before being redirected to login
+      if (!sessionData || !sessionData.user) {
+        // If session isn't available yet, wait a bit and try again
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        const retrySession = await refreshSession();
+        
+        if (!retrySession || !retrySession.user) {
+          throw new Error('Failed to establish session');
+        }
+      }
+      
+      // Log success and navigate to the page user tried to visit
+      console.log('Authentication successful, navigating to:', from);
       navigate(from, { replace: true });
     } catch (err) {
       setError('Invalid email or password');
