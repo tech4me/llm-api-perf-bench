@@ -32,7 +32,7 @@ const auth = betterAuth({
     cookie: {
       name: 'auth_session',
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       maxAge: 60 * 60 * 24 * 7 * 1000 // 7 days in milliseconds
     }
   }
