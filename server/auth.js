@@ -20,6 +20,7 @@ const auth = betterAuth({
     verificationRequired: false, // For simplicity, no email verification required
     autoSignIn: true
   },
+  /*
   // Session configuration with recommended Better Auth settings
   session: {
     expiresIn: 60 * 60 * 24 * 7, // 7 days in seconds (default)
@@ -36,6 +37,7 @@ const auth = betterAuth({
       maxAge: 60 * 60 * 24 * 7 * 1000 // 7 days in milliseconds
     }
   }
+  */
 });
 
 module.exports = { auth }; 

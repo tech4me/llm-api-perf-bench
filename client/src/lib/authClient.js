@@ -6,7 +6,7 @@ const authClient = createAuthClient({
   // Add support for session handling
   session: {
     refreshInterval: 5 * 60 * 1000, // Refresh session every 5 minutes
-    cookieCrossDomain: true // Enable cross-domain cookie support
+    //cookieCrossDomain: true // Enable cross-domain cookie support
   }
 });
 
