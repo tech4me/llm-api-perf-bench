@@ -33,7 +33,11 @@ const requireAuth = async (req, res, next) => {
 // API Vendors Endpoints - Protected
 app.get('/api/vendors', requireAuth, async (req, res) => {
   try {
-    const vendors = await prisma.apiVendor.findMany();
+    const vendors = await prisma.apiVendor.findMany({
+      where: {
+        userId: req.user.id
+      }
+    });
     res.json(vendors);
   } catch (error) {
     console.error('Error fetching vendors:', error);
@@ -50,6 +54,9 @@ app.post('/api/vendors', requireAuth, async (req, res) => {
         url,
         apiKey,
         modelName,
+        user: {
+          connect: { id: req.user.id }
+        }
       },
     });
     res.status(201).json(vendor);
@@ -63,6 +70,21 @@ app.put('/api/vendors/:id', requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
     const { name, url, apiKey, modelName } = req.body;
+    
+    // First check if the vendor belongs to the current user
+    const existingVendor = await prisma.apiVendor.findUnique({
+      where: { id },
+      select: { userId: true }
+    });
+    
+    if (!existingVendor) {
+      return res.status(404).json({ error: 'Vendor not found' });
+    }
+    
+    if (existingVendor.userId !== req.user.id) {
+      return res.status(403).json({ error: 'Unauthorized to update this vendor' });
+    }
+    
     const vendor = await prisma.apiVendor.update({
       where: { id },
       data: {
@@ -82,6 +104,20 @@ app.put('/api/vendors/:id', requireAuth, async (req, res) => {
 app.delete('/api/vendors/:id', requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
+    
+    // First check if the vendor belongs to the current user
+    const existingVendor = await prisma.apiVendor.findUnique({
+      where: { id },
+      select: { userId: true }
+    });
+    
+    if (!existingVendor) {
+      return res.status(404).json({ error: 'Vendor not found' });
+    }
+    
+    if (existingVendor.userId !== req.user.id) {
+      return res.status(403).json({ error: 'Unauthorized to delete this vendor' });
+    }
     
     // Delete vendor and its metrics in a transaction
     await prisma.$transaction([
@@ -155,6 +191,21 @@ app.delete('/api/metrics/:id', requireAuth, async (req, res) => {
 app.delete('/api/vendors/:id/metrics', requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
+    
+    // First check if the vendor belongs to the current user
+    const existingVendor = await prisma.apiVendor.findUnique({
+      where: { id },
+      select: { userId: true }
+    });
+    
+    if (!existingVendor) {
+      return res.status(404).json({ error: 'Vendor not found' });
+    }
+    
+    if (existingVendor.userId !== req.user.id) {
+      return res.status(403).json({ error: 'Unauthorized to delete metrics for this vendor' });
+    }
+    
     await prisma.performanceMetric.deleteMany({
       where: { apiVendorId: id },
     });
@@ -165,8 +216,8 @@ app.delete('/api/vendors/:id/metrics', requireAuth, async (req, res) => {
   }
 });
 
-// Start server
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+// Start the server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
