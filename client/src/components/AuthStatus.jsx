@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAuth } from '../lib/AuthContext';
+import { LogOut } from 'lucide-react';
 
 export function AuthStatus() {
   const { user, loading, signOut, isAuthenticated } = useAuth();
@@ -15,19 +16,13 @@ export function AuthStatus() {
   return (
     <div className="flex items-center gap-3">
       <div className="flex items-center gap-2">
-        {user.image && (
-          <img
-            src={user.image}
-            alt={user.name || user.email}
-            className="rounded-full max-w-[100px] h-auto object-scale-down"
-          />
-        )}
-        <span className="font-medium">{user.name || user.email}</span>
+        <span className="font-medium">{"User: " + user.name || user.email}</span>
       </div>
       <button
         onClick={signOut}
-        className="rounded-md bg-gray-200 px-3 py-1 text-sm font-medium text-gray-700 hover:bg-gray-300"
+        className="rounded-md bg-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-300 border-5 flex items-center gap-1 px-2 py-1"
       >
+        <LogOut size={16} />
         Sign out
       </button>
     </div>

@@ -24,7 +24,7 @@ const VendorList = ({
         <Button
           onClick={() => setShowModal(true)}
           size="sm"
-          className="h-8"
+          className="h-8 w-28"
         >
           <PlusCircle className="h-4 w-4 mr-2" />
           Add Vendor

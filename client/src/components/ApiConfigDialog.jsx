@@ -20,7 +20,7 @@ const ApiConfigDialog = ({
 }) => {
   return (
     <Dialog open={showModal} onOpenChange={setShowModal}>
-      <DialogContent className="max-w-[600px]">
+      <DialogContent className="max-w-[600px] border-20 border-background">
         <DialogHeader>
           <DialogTitle>LLM API Configuration</DialogTitle>
           <DialogDescription>
@@ -83,12 +83,13 @@ const ApiConfigDialog = ({
           </div>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={() => setShowModal(false)}>
+          <Button variant="outline" onClick={() => setShowModal(false)} className="w-28">
             Cancel
           </Button>
           <Button
             onClick={handleConfigSave}
             disabled={!apiConfig.name || !apiConfig.url || !apiConfig.apiKey || !apiConfig.modelName}
+            className="w-28"
           >
             Save
           </Button>

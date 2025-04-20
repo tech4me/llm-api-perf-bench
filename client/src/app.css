@@ -27,11 +27,7 @@
   flex: 1;
   padding: 1rem;
   overflow-y: auto;
-  border-right: 1px solid var(--border);
-}
-
-.component:last-child {
-  border-right: none;
+  position: relative;
 }
 
 /* Specific component customizations if needed */

@@ -62,88 +62,83 @@ export default function Register() {
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-background">
-            <Card className="w-[25%] max-w-md mx-auto">
-                <CardHeader className="text-center">
-                    <CardTitle className="text-2xl">LLM API Performance Bench</CardTitle>
-                    <CardDescription className="text-xl">Create your account</CardDescription>
-                </CardHeader>
-
-                <CardContent>
-                    {error && (
-                        <Alert variant="destructive" className="mb-4">
-                            <AlertDescription>{error}</AlertDescription>
-                        </Alert>
-                    )}
-
-                    <form className="space-y-6" onSubmit={handleSubmit}>
-                        <div className="space-y-4 w-full">
-                            <div className="space-y-2">
-                                <Label htmlFor="name">Name</Label>
-                                <Input
-                                    id="name"
-                                    name="name"
-                                    type="text"
-                                    autoComplete="name"
-                                    required
+            <div className="flex flex-col gap-6 w-full max-w-md">
+                <Card className='border-32 border-card'>
+                    <CardHeader>
+                        <CardTitle className="text-2xl">LLM API Performance Benchmark</CardTitle>
+                        <CardDescription>
+                            Create your account
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        {error && (
+                            <Alert variant="destructive" className="mb-4">
+                                <AlertDescription>{error}</AlertDescription>
+                            </Alert>
+                        )}
+                        <form onSubmit={handleSubmit}>
+                            <div className="flex flex-col gap-6">
+                                <div className="grid gap-2">
+                                    <Label htmlFor="name">Name</Label>
+                                    <Input
+                                        id="name"
+                                        name="name"
+                                        type="text"
+                                        autoComplete="name"
+                                        required
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        disabled={loading}
+                                    />
+                                </div>
+                                
+                                <div className="grid gap-2">
+                                    <Label htmlFor="email">Email</Label>
+                                    <Input
+                                        id="email"
+                                        name="email"
+                                        type="email"
+                                        autoComplete="email"
+                                        required
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        disabled={loading}
+                                    />
+                                </div>
+                                
+                                <div className="grid gap-2">
+                                    <Label htmlFor="password">Password</Label>
+                                    <Input
+                                        id="password"
+                                        name="password"
+                                        type="password"
+                                        autoComplete="new-password"
+                                        required
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        disabled={loading}
+                                    />
+                                </div>
+                                
+                                <Button 
+                                    type="submit" 
                                     className="w-full"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
                                     disabled={loading}
-                                />
+                                >
+                                    {loading ? 'Creating account...' : 'Create account'}
+                                </Button>
+                                
+                                <div className="mt-4 text-center text-sm">
+                                    Already have an account?{" "}
+                                    <Link to="/login" className="underline underline-offset-4">
+                                        Sign in
+                                    </Link>
+                                </div>
                             </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="email">Email address</Label>
-                                <Input
-                                    id="email"
-                                    name="email"
-                                    type="email"
-                                    autoComplete="email"
-                                    required
-                                    className="w-full"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    disabled={loading}
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="password">Password</Label>
-                                <Input
-                                    id="password"
-                                    name="password"
-                                    type="password"
-                                    autoComplete="new-password"
-                                    required
-                                    className="w-full"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    disabled={loading}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="flex justify-center w-full">
-                            <Button
-                                type="submit"
-                                className="w-full max-w-xs"
-                                disabled={loading}
-                            >
-                                {loading ? 'Creating account...' : 'Create account'}
-                            </Button>
-                        </div>
-                    </form>
-                </CardContent>
-
-                <CardFooter className="flex justify-center">
-                    <p className="text-sm text-muted-foreground">
-                        Already have an account?{' '}
-                        <Link to="/login" className="font-medium text-primary hover:underline">
-                            Sign in
-                        </Link>
-                    </p>
-                </CardFooter>
-            </Card>
+                        </form>
+                    </CardContent>
+                </Card>
+            </div>
         </div>
     );
 } 

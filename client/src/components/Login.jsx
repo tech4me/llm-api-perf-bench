@@ -79,73 +79,68 @@ export default function Login() {
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-background">
-            <Card className="w-[25%] max-w-md mx-auto">
-                <CardHeader className="text-center">
-                    <CardTitle className="text-2xl">LLM API Performance Bench</CardTitle>
-                    <CardDescription className="text-xl">Sign in to your account</CardDescription>
-                </CardHeader>
-
-                <CardContent>
-                    {error && (
-                        <Alert variant="destructive" className="mb-4">
-                            <AlertDescription>{error}</AlertDescription>
-                        </Alert>
-                    )}
-
-                    <form className="space-y-6" onSubmit={handleSubmit}>
-                        <div className="space-y-4 w-full">
-                            <div className="space-y-2">
-                                <Label htmlFor="email">Email address</Label>
-                                <Input
-                                    id="email"
-                                    name="email"
-                                    type="email"
-                                    autoComplete="email"
-                                    required
+            <div className="flex flex-col gap-6 w-full max-w-md">
+                <Card className='border-32 border-card'>
+                    <CardHeader>
+                        <CardTitle className="text-2xl">LLM API Performance Benchmark</CardTitle>
+                        <CardDescription>
+                            Enter your credentials below to login to your account
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        {error && (
+                            <Alert variant="destructive" className="mb-4">
+                                <AlertDescription>{error}</AlertDescription>
+                            </Alert>
+                        )}
+                        <form onSubmit={handleSubmit}>
+                            <div className="flex flex-col gap-6">
+                                <div className="grid gap-2">
+                                    <Label htmlFor="email">Email</Label>
+                                    <Input
+                                        id="email"
+                                        name="email"
+                                        type="email"
+                                        autoComplete="email"
+                                        required
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        disabled={isLoading}
+                                    />
+                                </div>
+                                <div className="grid gap-2">
+                                    <div className="flex items-center">
+                                        <Label htmlFor="password">Password</Label>
+                                    </div>
+                                    <Input
+                                        id="password"
+                                        name="password"
+                                        type="password"
+                                        autoComplete="current-password"
+                                        required
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        disabled={isLoading}
+                                    />
+                                </div>
+                                <Button 
+                                    type="submit" 
                                     className="w-full"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
                                     disabled={isLoading}
-                                />
+                                >
+                                    {isLoading ? 'Signing in...' : 'Sign in'}
+                                </Button>
+                                <div className="mt-4 text-center text-sm">
+                                    Don't have an account?{" "}
+                                    <Link to="/register" className="underline underline-offset-4">
+                                        Sign up
+                                    </Link>
+                                </div>
                             </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="password">Password</Label>
-                                <Input
-                                    id="password"
-                                    name="password"
-                                    type="password"
-                                    autoComplete="current-password"
-                                    required
-                                    className="w-full"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    disabled={isLoading}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="flex justify-center w-full">
-                            <Button
-                                type="submit"
-                                className="w-full max-w-xs"
-                                disabled={isLoading}
-                            >
-                                {isLoading ? 'Signing in...' : 'Sign in'}
-                            </Button>
-                        </div>
-                    </form>
-                </CardContent>
-
-                <CardFooter className="flex justify-center">
-                    <p className="text-sm text-muted-foreground">
-                        Don't have an account?{' '}
-                        <Link to="/register" className="font-medium text-primary hover:underline">
-                            Sign up
-                        </Link>
-                    </p>
-                </CardFooter>
-            </Card>
+                        </form>
+                    </CardContent>
+                </Card>
+            </div>
         </div>
     );
 }
