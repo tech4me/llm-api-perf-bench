@@ -7,7 +7,7 @@ export function GitHubLogin() {
       // Use Better Auth's social sign-in method
       await authClient.signIn.social({
         provider: "github",
-        callbackURL: "/"
+        //callbackURL: "/"
       });
       // Note: Better Auth will handle the redirect automatically
     } catch (error) {
