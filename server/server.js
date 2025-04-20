@@ -192,8 +192,32 @@ app.delete('/api/vendors/:id/metrics', requireAuth, async (req, res) => {
   }
 });
 
+// Database connection test function
+async function testDatabaseConnection() {
+  try {
+    // Attempt a simple query to test the connection
+    await prisma.$queryRaw`SELECT 1`;
+    console.log('✅ Database connection successful');
+    return true;
+  } catch (error) {
+    console.error('❌ Database connection failed:', error);
+    return false;
+  }
+}
+
 // Start server
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+
+// Test database connection before starting the server
+(async () => {
+  const isDbConnected = await testDatabaseConnection();
+  
+  if (isDbConnected) {
+    app.listen(port, () => {
+      console.log(`Server running on port ${port}`);
+    });
+  } else {
+    console.error('Server initialization aborted due to database connection failure');
+    process.exit(1);
+  }
+})();
