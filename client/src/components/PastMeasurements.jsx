@@ -1,23 +1,23 @@
 import React from "react";
-import { 
-  Card, 
-  CardHeader, 
-  CardTitle, 
-  CardContent 
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent
 } from "./ui/card";
-import { 
+import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
-  TooltipTrigger 
+  TooltipTrigger
 } from "./ui/tooltip";
 import { ScrollArea } from "./ui/scroll-area";
 import { Button } from "./ui/button";
 import { Trash } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 
-const PastMeasurements = ({ 
-  selectedVendorDetails, 
+const PastMeasurements = ({
+  selectedVendorDetails,
   filteredMeasurements,
   onDeleteMetric,
   onDeleteAllMetrics
@@ -27,12 +27,12 @@ const PastMeasurements = ({
     if (!filteredMeasurements || filteredMeasurements.length === 0) {
       return { avgTimeToFirstToken: 0, avgTokensPerSecond: 0 };
     }
-    
+
     let totalTimeToFirstToken = 0;
     let totalTokensPerSecond = 0;
     let ttftCount = 0;
     let tpsCount = 0;
-    
+
     filteredMeasurements.forEach(measurement => {
       if (measurement.timeToFirstToken) {
         totalTimeToFirstToken += measurement.timeToFirstToken;
@@ -43,23 +43,23 @@ const PastMeasurements = ({
         tpsCount++;
       }
     });
-    
+
     return {
       avgTimeToFirstToken: ttftCount > 0 ? totalTimeToFirstToken / ttftCount : 0,
       avgTokensPerSecond: tpsCount > 0 ? totalTokensPerSecond / tpsCount : 0
     };
   };
-  
+
   const { avgTimeToFirstToken, avgTokensPerSecond } = calculateAverages();
-  
+
   return (
     <Card className="h-full">
       <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
         <CardTitle className="text-xl">Past Measurements</CardTitle>
         {selectedVendorDetails && filteredMeasurements.length > 0 && (
-          <Button 
-            variant="outline" 
-            size="sm" 
+          <Button
+            variant="outline"
+            size="sm"
             className="h-8 text-destructive border-destructive hover:bg-destructive/10"
             onClick={() => {
               if (window.confirm(`Delete all measurements for ${selectedVendorDetails.name}?`)) {
@@ -101,7 +101,7 @@ const PastMeasurements = ({
                 </div>
               </div>
             </div>
-            
+
             <ScrollArea className="h-[70vh]">
               <div className="space-y-3">
                 {filteredMeasurements.map((measurement) => (
@@ -127,9 +127,9 @@ const PastMeasurements = ({
                             <span className="text-muted-foreground">Tokens per Second:</span> {measurement.tokensPerSecond ? `${measurement.tokensPerSecond.toFixed(2)}` : 'N/A'}
                           </div>
                           <div className="flex items-center justify-end mt-2">
-                            <Button 
-                              variant="ghost" 
-                              size="icon" 
+                            <Button
+                              variant="ghost"
+                              size="icon"
                               className="h-6 w-6 text-destructive hover:bg-destructive/10 ml-auto"
                               onClick={(e) => {
                                 e.stopPropagation();

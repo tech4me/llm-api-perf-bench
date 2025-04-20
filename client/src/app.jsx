@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { 
-  invokeLLM, 
-  fetchVendors, 
-  addVendor, 
-  fetchMetrics, 
-  deleteVendor, 
-  deleteMetric, 
-  deleteVendorMetrics 
+import {
+  invokeLLM,
+  fetchVendors,
+  addVendor,
+  fetchMetrics,
+  deleteVendor,
+  deleteMetric,
+  deleteVendorMetrics
 } from "./api";
 
 // Import our new components
@@ -49,18 +49,18 @@ function App() {
       try {
         const vendorsData = await fetchVendors();
         setVendors(vendorsData);
-        
+
         if (vendorsData.length > 0) {
           setSelectedVendor(vendorsData[0].id);
         }
-        
+
         const metricsData = await fetchMetrics();
         setPastMeasurements(metricsData);
       } catch (error) {
         console.error("Error loading initial data:", error);
       }
     };
-    
+
     loadData();
   }, []);
 
@@ -69,11 +69,11 @@ function App() {
       alert("Please select a vendor first");
       return;
     }
-    
+
     setLoading(true);
     setResponse(""); // Clear previous response
     setMetrics(null); // Clear previous metrics
-    
+
     try {
       // Pass a callback to update the response in real-time as chunks arrive
       const result = await invokeLLM(prompt, selectedVendor, (streamingText) => {
@@ -84,13 +84,13 @@ function App() {
           };
         });
       });
-      
+
       // Final update with complete response and metadata
       setResponse(result.response);
-      
+
       // Set the latest metrics
       setMetrics(result.metrics);
-      
+
       // Refresh the metrics list
       const metricsData = await fetchMetrics();
       setPastMeasurements(metricsData);
@@ -106,7 +106,7 @@ function App() {
     if (!apiConfig.name || !apiConfig.url || !apiConfig.apiKey || !apiConfig.modelName) {
       return;
     }
-    
+
     try {
       const newVendor = await addVendor({
         name: apiConfig.name,
@@ -114,14 +114,14 @@ function App() {
         apiKey: apiConfig.apiKey,
         modelName: apiConfig.modelName
       });
-      
+
       // Refresh vendors list
       const vendorsData = await fetchVendors();
       setVendors(vendorsData);
-      
+
       // Select the newly added vendor
       setSelectedVendor(newVendor.id);
-      
+
       setShowModal(false);
       setApiConfig({
         name: "",
@@ -146,16 +146,16 @@ function App() {
   const handleDeleteVendor = async (id) => {
     try {
       await deleteVendor(id);
-      
+
       // Refresh vendors and metrics
       const vendorsData = await fetchVendors();
       setVendors(vendorsData);
-      
+
       // If the deleted vendor was selected, select another vendor if available
       if (id === selectedVendor) {
         setSelectedVendor(vendorsData.length > 0 ? vendorsData[0].id : null);
       }
-      
+
       // Refresh metrics data as well
       const metricsData = await fetchMetrics();
       setPastMeasurements(metricsData);
@@ -168,7 +168,7 @@ function App() {
   const handleDeleteMetric = async (id) => {
     try {
       await deleteMetric(id);
-      
+
       // Refresh metrics data
       const metricsData = await fetchMetrics();
       setPastMeasurements(metricsData);
@@ -181,7 +181,7 @@ function App() {
   const handleDeleteAllMetrics = async (apiVendorId) => {
     try {
       await deleteVendorMetrics(apiVendorId);
-      
+
       // Refresh metrics data
       const metricsData = await fetchMetrics();
       setPastMeasurements(metricsData);
@@ -205,10 +205,10 @@ function App() {
         <h1 className="text-3xl font-bold text-center">LLM API Performance Bench</h1>
         <AuthStatus />
       </div>
-      
+
       <div className="component-container">
         <div className="component vendor-list bg-card text-card-foreground">
-          <VendorList 
+          <VendorList
             vendors={vendors}
             selectedVendor={selectedVendor}
             setSelectedVendor={setSelectedVendor}
@@ -216,18 +216,18 @@ function App() {
             onDeleteVendor={handleDeleteVendor}
           />
         </div>
-        
+
         <div className="component past-measurements bg-card text-card-foreground">
-          <PastMeasurements 
+          <PastMeasurements
             selectedVendorDetails={selectedVendorDetails}
             filteredMeasurements={filteredMeasurements}
             onDeleteMetric={handleDeleteMetric}
             onDeleteAllMetrics={handleDeleteAllMetrics}
           />
         </div>
-        
+
         <div className="component measurement-session bg-card text-card-foreground">
-          <MeasurementSession 
+          <MeasurementSession
             selectedVendorDetails={selectedVendorDetails}
             prompt={prompt}
             setPrompt={setPrompt}
@@ -239,7 +239,7 @@ function App() {
         </div>
       </div>
 
-      <ApiConfigDialog 
+      <ApiConfigDialog
         showModal={showModal}
         setShowModal={setShowModal}
         apiConfig={apiConfig}

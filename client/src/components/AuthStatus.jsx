@@ -16,9 +16,9 @@ export function AuthStatus() {
     <div className="flex items-center gap-3">
       <div className="flex items-center gap-2">
         {user.image && (
-          <img 
-            src={user.image} 
-            alt={user.name || user.email} 
+          <img
+            src={user.image}
+            alt={user.name || user.email}
             className="rounded-full max-w-[100px] h-auto object-scale-down"
           />
         )}
@@ -32,4 +32,4 @@ export function AuthStatus() {
       </button>
     </div>
   );
-} 
+}

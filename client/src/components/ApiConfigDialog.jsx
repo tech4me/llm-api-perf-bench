@@ -86,7 +86,7 @@ const ApiConfigDialog = ({
           <Button variant="outline" onClick={() => setShowModal(false)}>
             Cancel
           </Button>
-          <Button 
+          <Button
             onClick={handleConfigSave}
             disabled={!apiConfig.name || !apiConfig.url || !apiConfig.apiKey || !apiConfig.modelName}
           >

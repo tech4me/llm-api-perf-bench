@@ -70,21 +70,21 @@ app.put('/api/vendors/:id', requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
     const { name, url, apiKey, modelName } = req.body;
-    
+
     // First check if the vendor belongs to the current user
     const existingVendor = await prisma.apiVendor.findUnique({
       where: { id },
       select: { userId: true }
     });
-    
+
     if (!existingVendor) {
       return res.status(404).json({ error: 'Vendor not found' });
     }
-    
+
     if (existingVendor.userId !== req.user.id) {
       return res.status(403).json({ error: 'Unauthorized to update this vendor' });
     }
-    
+
     const vendor = await prisma.apiVendor.update({
       where: { id },
       data: {
@@ -104,21 +104,21 @@ app.put('/api/vendors/:id', requireAuth, async (req, res) => {
 app.delete('/api/vendors/:id', requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     // First check if the vendor belongs to the current user
     const existingVendor = await prisma.apiVendor.findUnique({
       where: { id },
       select: { userId: true }
     });
-    
+
     if (!existingVendor) {
       return res.status(404).json({ error: 'Vendor not found' });
     }
-    
+
     if (existingVendor.userId !== req.user.id) {
       return res.status(403).json({ error: 'Unauthorized to delete this vendor' });
     }
-    
+
     // Delete vendor and its metrics in a transaction
     await prisma.$transaction([
       prisma.performanceMetric.deleteMany({
@@ -128,7 +128,7 @@ app.delete('/api/vendors/:id', requireAuth, async (req, res) => {
         where: { id },
       })
     ]);
-    
+
     res.status(204).send();
   } catch (error) {
     console.error('Error deleting vendor:', error);
@@ -152,12 +152,12 @@ app.get('/api/metrics', requireAuth, async (req, res) => {
 app.post('/api/metrics', requireAuth, async (req, res) => {
   try {
     const { apiVendorId, timeToFirstToken, tokensPerSecond } = req.body;
-    
+
     // Check if apiVendorId exists
     if (!apiVendorId) {
       return res.status(400).json({ error: 'apiVendorId is required' });
     }
-    
+
     const metric = await prisma.performanceMetric.create({
       data: {
         timeToFirstToken,
@@ -191,21 +191,21 @@ app.delete('/api/metrics/:id', requireAuth, async (req, res) => {
 app.delete('/api/vendors/:id/metrics', requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     // First check if the vendor belongs to the current user
     const existingVendor = await prisma.apiVendor.findUnique({
       where: { id },
       select: { userId: true }
     });
-    
+
     if (!existingVendor) {
       return res.status(404).json({ error: 'Vendor not found' });
     }
-    
+
     if (existingVendor.userId !== req.user.id) {
       return res.status(403).json({ error: 'Unauthorized to delete metrics for this vendor' });
     }
-    
+
     await prisma.performanceMetric.deleteMany({
       where: { apiVendorId: id },
     });

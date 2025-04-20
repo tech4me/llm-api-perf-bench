@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { 
-  Card, 
-  CardHeader, 
-  CardTitle, 
-  CardContent, 
-  CardFooter 
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter
 } from "./ui/card";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
@@ -26,11 +26,11 @@ const PREDEFINED_PROMPTS = [
   { id: "custom", label: "Custom Prompt", text: "" }
 ];
 
-const MeasurementSession = ({ 
-  selectedVendorDetails, 
-  prompt, 
-  setPrompt, 
-  response, 
+const MeasurementSession = ({
+  selectedVendorDetails,
+  prompt,
+  setPrompt,
+  response,
   handleSubmit,
   loading,
   metrics
@@ -77,8 +77,8 @@ const MeasurementSession = ({
             <div className="space-y-4">
               <div className="space-y-2">
                 <p className="text-sm font-medium">Select a prompt type:</p>
-                <Select 
-                  value={selectedPromptType} 
+                <Select
+                  value={selectedPromptType}
                   onValueChange={handlePromptTypeChange}
                   disabled={loading}
                 >
@@ -102,10 +102,10 @@ const MeasurementSession = ({
                 disabled={loading || selectedPromptType !== "custom"}
                 className={`min-h-[120px] resize-none ${selectedPromptType !== "custom" ? "opacity-70" : ""}`}
               />
-              
-              <Button 
-                onClick={handleSubmit} 
-                disabled={loading || !prompt.trim()} 
+
+              <Button
+                onClick={handleSubmit}
+                disabled={loading || !prompt.trim()}
                 className="w-full"
               >
                 {loading ? (
@@ -157,11 +157,11 @@ const MeasurementSession = ({
               <div className="font-medium text-sm mb-2">Response:</div>
               <div className="text-sm whitespace-pre-wrap">
                 {response ? (
-                  <p>{typeof response === 'string' 
-                      ? response 
-                      : response.choices?.[0]?.message?.content || 
-                        response.choices?.[0]?.delta?.content || 
-                        'No content found in response'}
+                  <p>{typeof response === 'string'
+                    ? response
+                    : response.choices?.[0]?.message?.content ||
+                    response.choices?.[0]?.delta?.content ||
+                    'No content found in response'}
                   </p>
                 ) : (
                   <p className="text-muted-foreground">Response will appear here</p>

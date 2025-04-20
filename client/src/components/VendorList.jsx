@@ -1,19 +1,19 @@
 import React from "react";
-import { 
-  Card, 
-  CardHeader, 
-  CardTitle, 
-  CardContent 
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent
 } from "./ui/card";
 import { Button } from "./ui/button";
 import { PlusCircle, Trash } from "lucide-react";
 import { Badge } from "./ui/badge";
 import { ScrollArea } from "./ui/scroll-area";
 
-const VendorList = ({ 
-  vendors, 
-  selectedVendor, 
-  setSelectedVendor, 
+const VendorList = ({
+  vendors,
+  selectedVendor,
+  setSelectedVendor,
   setShowModal,
   onDeleteVendor
 }) => {
@@ -21,9 +21,9 @@ const VendorList = ({
     <Card className="h-full">
       <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
         <CardTitle className="text-xl">API Vendors</CardTitle>
-        <Button 
-          onClick={() => setShowModal(true)} 
-          size="sm" 
+        <Button
+          onClick={() => setShowModal(true)}
+          size="sm"
           className="h-8"
         >
           <PlusCircle className="h-4 w-4 mr-2" />
@@ -34,7 +34,7 @@ const VendorList = ({
         {vendors.length === 0 ? (
           <div className="flex items-center justify-center h-[200px] border border-dashed rounded-md">
             <p className="text-muted-foreground text-center">
-              No vendors configured. <br /> 
+              No vendors configured. <br />
               Add one to start.
             </p>
           </div>
@@ -44,12 +44,11 @@ const VendorList = ({
               {vendors.map((vendor) => (
                 <div
                   key={vendor.id}
-                  className={`p-3 border rounded-md cursor-pointer transition-colors hover:bg-accent relative ${
-                    selectedVendor === vendor.id ? "bg-accent border-primary/20" : ""
-                  }`}
+                  className={`p-3 border rounded-md cursor-pointer transition-colors hover:bg-accent relative ${selectedVendor === vendor.id ? "bg-accent border-primary/20" : ""
+                    }`}
                 >
                   <div className="flex items-center justify-between">
-                    <div 
+                    <div
                       className="font-medium flex-1"
                       onClick={() => setSelectedVendor(vendor.id)}
                     >{vendor.name}</div>
@@ -59,22 +58,22 @@ const VendorList = ({
                       )}
                     </div>
                   </div>
-                  <div 
+                  <div
                     className="text-xs text-muted-foreground truncate mt-1"
                     onClick={() => setSelectedVendor(vendor.id)}
                   >
                     {vendor.url}
                   </div>
-                  <div 
+                  <div
                     className="text-xs text-muted-foreground mt-1 flex items-center"
                     onClick={() => setSelectedVendor(vendor.id)}
                   >
                     <span className="font-medium">Model:</span> {vendor.modelName}
                   </div>
                   <div className="flex justify-end mt-2">
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
+                    <Button
+                      variant="ghost"
+                      size="icon"
                       className="h-6 w-6 text-destructive hover:bg-destructive/10"
                       onClick={(e) => {
                         e.stopPropagation();
@@ -96,4 +95,4 @@ const VendorList = ({
   );
 };
 
-export default VendorList; 
+export default VendorList;

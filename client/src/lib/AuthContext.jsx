@@ -13,7 +13,7 @@ export function AuthProvider({ children }) {
   const fetchSession = async () => {
     console.log('Fetching session...');
     setLoading(true);
-    
+
     try {
       const { data } = await authClient.getSession();
       console.log('Session fetched successfully:', data);
@@ -34,23 +34,23 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     let mounted = true;
     let intervalId = null;
-    
+
     const initialize = async () => {
       try {
         await fetchSession();
       } catch (err) {
         console.error('Initial session fetch failed:', err);
       }
-      
+
       // Only set up interval if component is still mounted
       if (mounted) {
         // Set up an interval to periodically check the session
         intervalId = setInterval(fetchSession, 5 * 60 * 1000); // Check every 5 minutes
       }
     };
-    
+
     initialize();
-    
+
     // Clean up interval on unmount
     return () => {
       mounted = false;
@@ -64,7 +64,7 @@ export function AuthProvider({ children }) {
   const signOut = async () => {
     console.log('Signing out...');
     setLoading(true);
-    
+
     try {
       await authClient.signOut();
       console.log('Signed out successfully');

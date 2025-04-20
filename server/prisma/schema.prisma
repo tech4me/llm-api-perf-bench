@@ -61,7 +61,7 @@ model User {
   sessions      Session[]
   emailVerified Boolean
   accounts      Account[]
-  
+
   // Relation to API vendors
   apiVendors    ApiVendor[]
 
