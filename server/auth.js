@@ -28,22 +28,22 @@ const auth = betterAuth({
     cookieCache: {
       enabled: true,
       maxAge: 5 * 60 // Cache duration of 5 minutes
-    },
-    cookie: {
-      secure: true,
-      sameSite: "none",
-      path: "/",
     }
   },
   advanced: {
     crossSubDomainCookies: {
       enabled: true,
+    },
+    cookie: {
+      secure: true,
+      sameSite: "none",
+      path: "/",
+    },
+    defaultCookieAttributes: {
+      secure: true,
+      sameSite: "none"
     }
   },
-  defaultCookieAttributes: {
-    secure: true,
-    sameSite: "none"
-  }
 });
 
 module.exports = { auth }; 
