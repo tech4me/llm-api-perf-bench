@@ -19,7 +19,7 @@ const auth = betterAuth({
     github: {
       clientId: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: process.env.CLIENT_URL + "/api/auth/callback/github" || 'http://localhost:5173/api/auth/callback/github'
+      //callbackURL: process.env.CLIENT_URL + "/api/auth/callback/github" || 'http://localhost:5173/api/auth/callback/github'
     }
   },
   // Session configuration with recommended Better Auth settings
