@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../lib/AuthContext';
 import authClient from '../lib/authClient';
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
+import { Alert, AlertDescription } from "./ui/alert";
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -74,75 +79,73 @@ export default function Login() {
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-background">
-            <div className="w-full max-w-md p-8 space-y-8 bg-card rounded-lg shadow-md">
-                <div className="text-center">
-                    <h1 className="text-2xl font-bold">LLM API Performance Bench</h1>
-                    <h2 className="mt-6 text-xl font-medium">Sign in to your account</h2>
-                </div>
+            <Card className="w-[25%] max-w-md mx-auto">
+                <CardHeader className="text-center">
+                    <CardTitle className="text-2xl">LLM API Performance Bench</CardTitle>
+                    <CardDescription className="text-xl">Sign in to your account</CardDescription>
+                </CardHeader>
 
-                {error && (
-                    <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-                        {error}
-                    </div>
-                )}
+                <CardContent>
+                    {error && (
+                        <Alert variant="destructive" className="mb-4">
+                            <AlertDescription>{error}</AlertDescription>
+                        </Alert>
+                    )}
 
-                <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-                    <div className="space-y-4">
-                        <div>
-                            <label htmlFor="email" className="block text-sm font-medium">
-                                Email address
-                            </label>
-                            <input
-                                id="email"
-                                name="email"
-                                type="email"
-                                autoComplete="email"
-                                required
-                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                disabled={isLoading}
-                            />
+                    <form className="space-y-6" onSubmit={handleSubmit}>
+                        <div className="space-y-4 w-full">
+                            <div className="space-y-2">
+                                <Label htmlFor="email">Email address</Label>
+                                <Input
+                                    id="email"
+                                    name="email"
+                                    type="email"
+                                    autoComplete="email"
+                                    required
+                                    className="w-full"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    disabled={isLoading}
+                                />
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label htmlFor="password">Password</Label>
+                                <Input
+                                    id="password"
+                                    name="password"
+                                    type="password"
+                                    autoComplete="current-password"
+                                    required
+                                    className="w-full"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    disabled={isLoading}
+                                />
+                            </div>
                         </div>
 
-                        <div>
-                            <label htmlFor="password" className="block text-sm font-medium">
-                                Password
-                            </label>
-                            <input
-                                id="password"
-                                name="password"
-                                type="password"
-                                autoComplete="current-password"
-                                required
-                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                        <div className="flex justify-center w-full">
+                            <Button
+                                type="submit"
+                                className="w-full max-w-xs"
                                 disabled={isLoading}
-                            />
+                            >
+                                {isLoading ? 'Signing in...' : 'Sign in'}
+                            </Button>
                         </div>
-                    </div>
+                    </form>
+                </CardContent>
 
-                    <div>
-                        <button
-                            type="submit"
-                            className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md"
-                            disabled={isLoading}
-                        >
-                            {isLoading ? 'Signing in...' : 'Sign in'}
-                        </button>
-                    </div>
-                </form>
-
-                <div className="mt-4 text-center">
-                    <p className="text-sm text-gray-600">
+                <CardFooter className="flex justify-center">
+                    <p className="text-sm text-muted-foreground">
                         Don't have an account?{' '}
-                        <Link to="/register" className="font-medium text-blue-600 hover:text-blue-500">
+                        <Link to="/register" className="font-medium text-primary hover:underline">
                             Sign up
                         </Link>
                     </p>
-                </div>
-            </div>
+                </CardFooter>
+            </Card>
         </div>
     );
 }
