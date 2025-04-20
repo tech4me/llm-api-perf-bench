@@ -7,9 +7,11 @@ export function GitHubLogin() {
       // Use Better Auth's social sign-in method
       await authClient.signIn.social({
         provider: "github",
-        callbackURL: "https://llm-api-perf-bench-8asr8.ondigitalocean.app/"
       });
-      // Note: Better Auth will handle the redirect automatically
+      
+      // Manually redirect to the home page
+      window.location.href = '/';
+
     } catch (error) {
       console.error("GitHub login error:", error);
     }
