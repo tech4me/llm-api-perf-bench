@@ -2,7 +2,11 @@ import { createAuthClient } from "better-auth/client";
 
 // Create a single instance of the auth client with the correct base URL
 const authClient = createAuthClient({
-  baseURL: "https://llm-api-perf-bench-g3ef2.ondigitalocean.app" // Point to your server URL
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000",
+  // Add support for session handling
+  session: {
+    refreshInterval: 5 * 60 * 1000 // Refresh session every 5 minutes
+  }
 });
 
 // Export the singleton instance

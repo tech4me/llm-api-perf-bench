@@ -6,36 +6,6 @@ const app = express();
 const prisma = new PrismaClient();
 const { auth } = require('./auth');
 
-// Raw body logger middleware
-/*
-app.use((req, res, next) => {
-  let rawBody = '';
-
-  req.on('data', (chunk) => {
-    rawBody += chunk.toString();
-  });
-
-  req.on('end', () => {
-    console.log('--- Raw Request Log ---');
-    console.log(`Time: ${new Date().toISOString()}`);
-    console.log(`Method: ${req.method}`);
-    console.log(`URL: ${req.originalUrl}`);
-    console.log('Headers:', req.headers);
-    console.log('Raw Body:', rawBody);
-    console.log('------------------------');
-
-    // Optionally attach rawBody to req for later use
-    req.rawBody = rawBody;
-    next();
-  });
-
-  req.on('error', (err) => {
-    console.error('Error reading raw request body:', err);
-    next(err);
-  });
-});
-*/
-
 // Middleware
 app.use(cors({
   origin: process.env.CLIENT_URL || 'http://localhost:5173',

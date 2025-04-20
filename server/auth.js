@@ -14,12 +14,11 @@ const auth = betterAuth({
   }),
   // Trusted origins configuration
   trustedOrigins: [process.env.CLIENT_URL || 'http://localhost:5173'],
-  // OAuth providers configuration
-  socialProviders: {
-    github: {
-      clientId: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET
-    }
+  // Enable email/password authentication
+  emailAndPassword: {
+    enabled: true,
+    verificationRequired: false, // For simplicity, no email verification required
+    autoSignIn: true
   },
   // Session configuration with recommended Better Auth settings
   session: {

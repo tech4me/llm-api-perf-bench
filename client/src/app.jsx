@@ -16,13 +16,12 @@ import MeasurementSession from "./components/MeasurementSession";
 import ApiConfigDialog from "./components/ApiConfigDialog";
 import { AuthStatus } from "./components/AuthStatus";
 import { useAuth } from "./lib/AuthContext";
-import { GitHubLogin } from "./components/GitHubLogin";
 
 // Add global styles
 import "./app.css";
 
 function App() {
-  const { isAuthenticated, loading: authLoading } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [prompt, setPrompt] = useState("");
   const [response, setResponse] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -46,26 +45,24 @@ function App() {
 
   // Fetch vendors and metrics on component mount
   useEffect(() => {
-    if (isAuthenticated) {
-      const loadData = async () => {
-        try {
-          const vendorsData = await fetchVendors();
-          setVendors(vendorsData);
-          
-          if (vendorsData.length > 0) {
-            setSelectedVendor(vendorsData[0].id);
-          }
-          
-          const metricsData = await fetchMetrics();
-          setPastMeasurements(metricsData);
-        } catch (error) {
-          console.error("Error loading initial data:", error);
+    const loadData = async () => {
+      try {
+        const vendorsData = await fetchVendors();
+        setVendors(vendorsData);
+        
+        if (vendorsData.length > 0) {
+          setSelectedVendor(vendorsData[0].id);
         }
-      };
-      
-      loadData();
-    }
-  }, [isAuthenticated]);
+        
+        const metricsData = await fetchMetrics();
+        setPastMeasurements(metricsData);
+      } catch (error) {
+        console.error("Error loading initial data:", error);
+      }
+    };
+    
+    loadData();
+  }, []);
 
   const handleSubmit = async () => {
     if (!selectedVendor) {
@@ -209,46 +206,38 @@ function App() {
         <AuthStatus />
       </div>
       
-      {!authLoading && !isAuthenticated ? (
-        <div className="flex flex-col items-center justify-center mt-16">
-          <h2 className="text-2xl font-medium mb-4 text-center">Welcome to LLM API Performance Bench</h2>
-          <p className="text-gray-600 mb-8 text-center">Please sign in to access the application.</p>
-          <GitHubLogin />
+      <div className="component-container">
+        <div className="component vendor-list bg-card text-card-foreground">
+          <VendorList 
+            vendors={vendors}
+            selectedVendor={selectedVendor}
+            setSelectedVendor={setSelectedVendor}
+            setShowModal={setShowModal}
+            onDeleteVendor={handleDeleteVendor}
+          />
         </div>
-      ) : (
-        <div className="component-container">
-          <div className="component vendor-list bg-card text-card-foreground">
-            <VendorList 
-              vendors={vendors}
-              selectedVendor={selectedVendor}
-              setSelectedVendor={setSelectedVendor}
-              setShowModal={setShowModal}
-              onDeleteVendor={handleDeleteVendor}
-            />
-          </div>
-          
-          <div className="component past-measurements bg-card text-card-foreground">
-            <PastMeasurements 
-              selectedVendorDetails={selectedVendorDetails}
-              filteredMeasurements={filteredMeasurements}
-              onDeleteMetric={handleDeleteMetric}
-              onDeleteAllMetrics={handleDeleteAllMetrics}
-            />
-          </div>
-          
-          <div className="component measurement-session bg-card text-card-foreground">
-            <MeasurementSession 
-              selectedVendorDetails={selectedVendorDetails}
-              prompt={prompt}
-              setPrompt={setPrompt}
-              response={response}
-              handleSubmit={handleSubmit}
-              loading={loading}
-              metrics={metrics}
-            />
-          </div>
+        
+        <div className="component past-measurements bg-card text-card-foreground">
+          <PastMeasurements 
+            selectedVendorDetails={selectedVendorDetails}
+            filteredMeasurements={filteredMeasurements}
+            onDeleteMetric={handleDeleteMetric}
+            onDeleteAllMetrics={handleDeleteAllMetrics}
+          />
         </div>
-      )}
+        
+        <div className="component measurement-session bg-card text-card-foreground">
+          <MeasurementSession 
+            selectedVendorDetails={selectedVendorDetails}
+            prompt={prompt}
+            setPrompt={setPrompt}
+            response={response}
+            handleSubmit={handleSubmit}
+            loading={loading}
+            metrics={metrics}
+          />
+        </div>
+      </div>
 
       <ApiConfigDialog 
         showModal={showModal}
