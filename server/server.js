@@ -25,11 +25,6 @@ app.use((req, res, next) => {
 
     // Optionally attach rawBody to req for later use
     req.rawBody = rawBody;
-
-    console.log("DEBUG:");
-    console.log(req.url);
-    //let path = url.pathname.split(config?.basePath ? url.pathname.split(config.basePath)[1] : url.pathname);
-    //console.log(path);
     next();
   });
 
