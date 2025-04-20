@@ -7,6 +7,7 @@ const prisma = new PrismaClient();
 const { auth } = require('./auth');
 
 // Raw body logger middleware
+/*
 app.use((req, res, next) => {
   let rawBody = '';
 
@@ -33,6 +34,7 @@ app.use((req, res, next) => {
     next(err);
   });
 });
+*/
 
 // Middleware
 app.use(cors({
