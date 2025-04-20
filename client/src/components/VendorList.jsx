@@ -44,7 +44,7 @@ const VendorList = ({
               {vendors.map((vendor) => (
                 <div
                   key={vendor.id}
-                  className={`p-3 border rounded-md cursor-pointer transition-colors hover:bg-accent ${
+                  className={`p-3 border rounded-md cursor-pointer transition-colors hover:bg-accent relative ${
                     selectedVendor === vendor.id ? "bg-accent border-primary/20" : ""
                   }`}
                 >
@@ -57,19 +57,6 @@ const VendorList = ({
                       {selectedVendor === vendor.id && (
                         <Badge variant="outline">Active</Badge>
                       )}
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="h-6 w-6 text-destructive hover:bg-destructive/10"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (window.confirm(`Are you sure you want to delete ${vendor.name}?`)) {
-                            onDeleteVendor(vendor.id);
-                          }
-                        }}
-                      >
-                        <Trash className="h-4 w-4" />
-                      </Button>
                     </div>
                   </div>
                   <div 
@@ -83,6 +70,21 @@ const VendorList = ({
                     onClick={() => setSelectedVendor(vendor.id)}
                   >
                     <span className="font-medium">Model:</span> {vendor.modelName}
+                  </div>
+                  <div className="flex justify-end mt-2">
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="h-6 w-6 text-destructive hover:bg-destructive/10"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (window.confirm(`Are you sure you want to delete ${vendor.name}?`)) {
+                          onDeleteVendor(vendor.id);
+                        }
+                      }}
+                    >
+                      <Trash className="h-4 w-4" />
+                    </Button>
                   </div>
                 </div>
               ))}

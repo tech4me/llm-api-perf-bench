@@ -101,6 +101,33 @@ This project satisfies the course requirements in the following ways:
 
 # Development Guide
 
+## Frontend:
+Install all depedency by running `npm install`
+
+Setup the .env file with the following fields
+
+Start the vite server
+`npm run dev`
+
+Build the static page
+`npm run build`
+
+Start the preview server
+`npm run start`
+
+## Backend:
+Install all depedency by running `npm install`
+
+Setup the .env file with the following fields
+
+Generate the prisma files
+`npx prisma generate`
+
+Start the backend server
+`npm run dev`
+
+## Database:
+The database can be deployed to the database server. First set up DATABASE_URL in .env. Then run `npx prisma db push` to deploy the schema. Prisma studio can still be used to view or edit the cloud based database. `npx prisma studio`.
 
 
 # Deployment Information
