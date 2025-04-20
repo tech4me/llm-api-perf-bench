@@ -54,9 +54,7 @@ export function AuthProvider({ children }) {
     isAuthenticated: !!session?.user,
     refreshSession: async () => {
       try {
-        const { data } = await authClient.getSession({ 
-          query: { disableCookieCache: true }
-        });
+        const { data } = await authClient.getSession();
         setSession(data);
         return data;
       } catch (error) {
