@@ -7,11 +7,11 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [localLoading, setLocalLoading] = useState(false);
   
   const navigate = useNavigate();
   const location = useLocation();
-  const { refreshSession } = useAuth();
+  const { refreshSession, loading: authLoading } = useAuth();
   
   // Get the url to redirect to after login, or default to "/"
   const from = location.state?.from?.pathname || "/";
@@ -19,9 +19,11 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setLoading(true);
+    setLocalLoading(true);
     
     try {
+      console.log('Starting login process...');
+      
       // Use the Better Auth method for email login
       const { data, error: authError } = await authClient.signIn.email({
         email,
@@ -30,17 +32,26 @@ export default function Login() {
         rememberMe: true
       });
       
+      console.log('Sign in response:', { data, authError });
+      
       if (authError) {
         throw new Error(authError.message || 'Authentication failed');
       }
       
+      // Small delay to ensure server has processed the login
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
       // Refresh session to update auth context
+      console.log('Refreshing session after login...');
       const sessionData = await refreshSession();
+      console.log('Session refresh result:', sessionData);
       
       if (!sessionData || !sessionData.user) {
-        // If session isn't available yet, wait a bit and try again
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        // If session isn't available yet, wait and try again
+        console.log('Session not immediately available, retrying...');
+        await new Promise(resolve => setTimeout(resolve, 1500));
         const retrySession = await refreshSession();
+        console.log('Retry session result:', retrySession);
         
         if (!retrySession || !retrySession.user) {
           throw new Error('Failed to establish session');
@@ -51,12 +62,15 @@ export default function Login() {
       console.log('Authentication successful, navigating to:', from);
       navigate(from, { replace: true });
     } catch (err) {
-      setError('Invalid email or password');
-      console.error('Login error:', err);
+      console.error('Login error details:', err);
+      setError(err.message || 'Invalid email or password');
     } finally {
-      setLoading(false);
+      setLocalLoading(false);
     }
   };
+  
+  // Determine if we're in a loading state
+  const isLoading = localLoading || authLoading;
   
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">
@@ -87,6 +101,7 @@ export default function Login() {
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                disabled={isLoading}
               />
             </div>
             
@@ -103,6 +118,7 @@ export default function Login() {
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                disabled={isLoading}
               />
             </div>
           </div>
@@ -111,9 +127,9 @@ export default function Login() {
             <button
               type="submit"
               className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md"
-              disabled={loading}
+              disabled={isLoading}
             >
-              {loading ? 'Signing in...' : 'Sign in'}
+              {isLoading ? 'Signing in...' : 'Sign in'}
             </button>
           </div>
         </form>

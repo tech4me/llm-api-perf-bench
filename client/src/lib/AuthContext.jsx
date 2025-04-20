@@ -7,61 +7,90 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [session, setSession] = useState(null);
+  const [authError, setAuthError] = useState(null);
 
-  // Fetch the current user on component mount and set up session management
+  // Function to fetch the session - extracted from useEffect for reusability
+  const fetchSession = async () => {
+    console.log('Fetching session...');
+    setLoading(true);
+    
+    try {
+      const { data } = await authClient.getSession();
+      console.log('Session fetched successfully:', data);
+      setSession(data);
+      setAuthError(null);
+      return data;
+    } catch (error) {
+      console.error('Error fetching session:', error);
+      setSession(null);
+      setAuthError(error);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch the initial session on mount
   useEffect(() => {
-    // Initialize session state
-    const fetchSession = async () => {
+    let mounted = true;
+    let intervalId = null;
+    
+    const initialize = async () => {
       try {
-        // Use Better Auth's session management
-        const { data } = await authClient.getSession();
-        setSession(data);
-      } catch (error) {
-        console.error('Error fetching session:', error);
-        setSession(null);
-      } finally {
-        setLoading(false);
+        await fetchSession();
+      } catch (err) {
+        console.error('Initial session fetch failed:', err);
+      }
+      
+      // Only set up interval if component is still mounted
+      if (mounted) {
+        // Set up an interval to periodically check the session
+        intervalId = setInterval(fetchSession, 5 * 60 * 1000); // Check every 5 minutes
       }
     };
-
-    fetchSession();
-
-    // Set up an interval to periodically check the session
-    const intervalId = setInterval(fetchSession, 5 * 60 * 1000); // Check every 5 minutes
-
-    // Clean up interval
+    
+    initialize();
+    
+    // Clean up interval on unmount
     return () => {
-      clearInterval(intervalId);
+      mounted = false;
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
     };
   }, []);
 
   // Sign out the user
   const signOut = async () => {
+    console.log('Signing out...');
+    setLoading(true);
+    
     try {
-      // Use Better Auth's client API to sign out
       await authClient.signOut();
+      console.log('Signed out successfully');
       setSession(null);
     } catch (error) {
       console.error('Error signing out:', error);
+      setAuthError(error);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  // Refresh the session (used after login/registration)
+  const refreshSession = async () => {
+    console.log('Refreshing session...');
+    return await fetchSession();
   };
 
   const value = {
     user: session?.user || null,
     session,
     loading,
+    error: authError,
     signOut,
     isAuthenticated: !!session?.user,
-    refreshSession: async () => {
-      try {
-        const { data } = await authClient.getSession();
-        setSession(data);
-        return data;
-      } catch (error) {
-        console.error('Error refreshing session:', error);
-        return null;
-      }
-    }
+    refreshSession
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
