@@ -16,7 +16,7 @@ In today's AI landscape, organizations face a critical business challenge: selec
 - Response latency and throughput 
 - Consistency across different prompt types
 
-Despite the significant financial and performance implications of these choices, users currently lack easy-to-use, objective, and personalized tools to evaluate providers based on metrics that directly impact their specific user experience and operational costs.
+Despite the significant financial and performance implications of these choices, users currently lack easy-to-use, objective, and personalized tools to evaluate providers based on metrics that directly impact their specific user experiences and operational costs.
 
 ## Value Proposition
 This project delivers substantial value by:
@@ -27,7 +27,7 @@ This project delivers substantial value by:
 4. **Providing competitive insights**: Delivering ongoing benchmarking capabilities as the LLM provider landscape evolves
 5. **Democratizing performance testing**: Making sophisticated benchmarking accessible without requiring extensive technical knowledge
 
-By addressing these needs, the tool empowers users to make informed decisions tailored to their specific use cases. Our platform bridges these gaps by providing an accessible and customizable benchmarking solution that offers the precision of custom tools with the ease-of-use of third-party platforms.
+By addressing these needs, the tool empowers users to make informed decisions tailored to their specific use cases. Our platform bridges these gaps by providing an accessible and customizable benchmarking solution that offers the precision of custom tools with the ease of use of third-party platforms.
 
 # Objectives
 
@@ -37,7 +37,7 @@ The primary objective of this project is to create a full-stack web application 
 1. Provide objective performance metrics for comparing LLM API providers
 2. Enable personalized benchmarking with users' own API keys and custom prompts
 3. Visualize performance data in an intuitive and actionable format
-4. Store historical benchmark results for tracking provider change over time
+4. Store historical benchmark results for tracking provider changes over time
 5. Create a secure environment where users can safely manage their API keys
 
 By integrating these capabilities into a cohesive platform, users can make data-driven decisions about which LLM providers best suit their specific needs based on actual performance measurements rather than marketing claims.
@@ -110,16 +110,23 @@ The system maintains a comprehensive history of benchmark results:
 
 This feature allows users to track performance changes over time and identify optimal periods for specific workloads.
 
+## Export Measurement Data
+Measurement data can be exported to a CSV file:
+- Enable custom data analysis
+- Provide a comprehensive data dump
+
+This feature allows users to save critical measurement results for further analysis and share them with others to build a case before committing to a particular API vendor.
+
 # User Guide
 
 ## User Authentication
-![Authentication Screen](https://example.com/auth-screenshot.png)
+![Authentication Screen](images/login.png)
 
 When a new user visits the site, they are automatically redirected to the sign-in page. The authentication flow works as follows:
 
 1. **Sign Up**: New users can click the "Sign Up" button to access the registration page
    - Required information: username, email address, and password
-   - All fields must be valid (proper email format, password minimum length)
+   - All fields must be valid (proper email format, minimum password length)
    - Upon successful registration, users are automatically logged in
 
 2. **Sign In**: Returning users can enter their credentials on the sign-in page
@@ -127,7 +134,7 @@ When a new user visits the site, they are automatically redirected to the sign-i
    - After successful authentication, users are redirected to the main application
 
 ## LLM API Vendor Management
-![Vendor Management](https://example.com/vendor-management.png)
+![Vendor Management](images/vendor.png)
 
 From the main dashboard, users can manage their LLM API vendors:
 
@@ -156,7 +163,7 @@ To run a performance benchmark:
    - Total response time
 
 ## Managing Measurement Results
-![Results Management](https://example.com/results-screenshot.png)
+![Results Management](images/measurement.png)
 
 The central panel displays all previous benchmark results:
 
@@ -168,6 +175,10 @@ The central panel displays all previous benchmark results:
 2. **Individual Results**: Below the summary, browse through all previous benchmark runs
    - Sorted by time
    - Remove unwanted results using the trash icon
+
+3. **Export Result**: At the top left, export all measurement data for this account as a CSV file
+   - Include data for all API vendors and all measurements
+   - Sorted by time
 
 # Development Guide
 
@@ -247,25 +258,34 @@ The central panel displays all previous benchmark results:
 
 ## Database Setup
 
-1. Create a PostgreSQL database:
-   ```bash
-   createdb llm_benchmark
-   ```
+The application requires a PostgreSQL database. You can set it up locally or use a cloud provider.
 
-2. Push the schema to your database:
-   ```bash
-   npx prisma db push
-   ```
+1.  **Ensure PostgreSQL is running.**
 
-3. (Optional) Explore your database with Prisma Studio:
-   ```bash
-   npx prisma studio
-   ```
+2.  **Configure the Database Connection:**
+    *   **Local Setup:** Create a new PostgreSQL database. For example, using the `createdb` command:
+        ```bash
+        createdb llm_benchmark
+        ```
+        Then, update the `DATABASE_URL` in the `server/.env` file with your local connection details (e.g., `postgresql://username:password@localhost:5432/llm_benchmark`).
+    *   **Cloud Setup:** Set up a PostgreSQL database on your chosen cloud provider's platform (e.g., DigitalOcean Managed Databases, AWS RDS, Heroku Postgres). Obtain the database connection string provided by the service. Update the `DATABASE_URL` in the `server/.env` file with this connection string.
 
+3.  **Apply the Database Schema:**
+    Navigate to the `server` directory and run the Prisma command to push the schema to your configured database:
+    ```bash
+    cd server 
+    npx prisma db push
+    ```
+
+4.  **(Optional) Explore the Database:**
+    You can use Prisma Studio to view and interact with your database:
+    ```bash
+    npx prisma studio
+    ```
 
 # Deployment Information
 
-The application is deployed at: [https://llm-api-perf-bench-8asr8.ondigitalocean.app/](https://llm-api-perf-bench-8asr8.ondigitalocean.app/)
+The application is deployed at: [https://llm-api-perf-bench-client-tom5w.ondigitalocean.app/](https://llm-api-perf-bench-client-tom5w.ondigitalocean.app/)
 
 ## Deployment Architecture
 
@@ -341,4 +361,4 @@ Coming from a background in compiler engineering with C++ and other lower-level 
 Implementing a RESTful API architecture proved highly effective for separating concerns and enabling future extensibility. This approach has inspired ideas for future projects that could leverage simple RESTful interfaces to provide user-friendly frontends for complex backend systems.
 
 ## Conclusion
-This project successfully demonstrates the value of a dedicated LLM API benchmarking tool while highlighting both the challenges and opportunities in modern web development. The combination of React frontend and Express.js backend proved to be an efficient and effective architecture for this application. The experience gained through this project has deepened my understanding of full-stack development and will inform future work in this domain.
+This project successfully demonstrates the value of a dedicated LLM API benchmarking tool while highlighting both the challenges and opportunities in modern web development. The combination of the React frontend and Express.js backend proved to be an efficient and effective architecture for this application. The experience gained through this project has deepened my understanding of full-stack development and will inform future work in this domain.

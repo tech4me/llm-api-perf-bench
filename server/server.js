@@ -216,6 +216,44 @@ app.delete('/api/vendors/:id/metrics', requireAuth, async (req, res) => {
   }
 });
 
+// Endpoint to export metrics as CSV
+app.get('/api/metrics/export', requireAuth, async (req, res) => {
+  try {
+    // Fetch metrics that belong to the current user's vendors
+    const metrics = await prisma.performanceMetric.findMany({
+      where: { apiVendor: { userId: req.user.id } },
+      include: { apiVendor: true },
+      orderBy: { createdAt: 'asc' },
+    });
+
+    // Define CSV headers
+    const headers = ['metricId','vendorId','vendorName','timeToFirstToken','tokensPerSecond','createdAt','updatedAt'];
+    // Build CSV rows
+    const csvRows = [headers.join(',')];
+    metrics.forEach(m => {
+      const row = [
+        m.id,
+        m.apiVendorId,
+        m.apiVendor.name,
+        m.timeToFirstToken,
+        m.tokensPerSecond,
+        m.createdAt.toISOString(),
+        m.updatedAt.toISOString(),
+      ].map(val => `"${val}"`).join(',');
+      csvRows.push(row);
+    });
+    const csv = csvRows.join('\n');
+
+    // Send CSV as file attachment
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', 'attachment; filename="metrics.csv"');
+    res.send(csv);
+  } catch (error) {
+    console.error('Error exporting metrics:', error);
+    res.status(500).json({ error: 'Failed to export metrics' });
+  }
+});
+
 // Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

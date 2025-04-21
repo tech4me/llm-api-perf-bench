@@ -103,6 +103,19 @@ export const deleteVendorMetrics = async (apiVendorId) => {
   }
 };
 
+// Export all metrics as CSV
+export const exportMetricsCsv = async () => {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/api/metrics/export`, {
+    ...fetchOptions,
+    method: 'GET',
+  });
+  if (!response.ok) {
+    throw new Error('Failed to export metrics');
+  }
+  const blob = await response.blob();
+  return blob;
+};
+
 // Process a chunk of text from an LLM stream
 const processStreamChunk = (chunk) => {
   let extractedText = '';
