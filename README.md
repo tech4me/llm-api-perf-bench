@@ -1,6 +1,9 @@
 # LLM API Performance Bench
 A Web Application for Benchmarking LLM API Performance
 
+## Video Demo
+[![Demo](demo.mp4)]
+
 # Team Information
 Shizhang Yin | 1002428027 | shizhang.yin@mail.utoronto.ca
 
