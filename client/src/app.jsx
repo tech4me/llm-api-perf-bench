@@ -202,7 +202,7 @@ function App() {
   return (
     <div className="app-container bg-background text-foreground">
       <div className="flex justify-between items-center px-6 py-3">
-        <h1 className="text-3xl font-bold text-center">LLM API Performance Bench</h1>
+        <h1 className="text-3xl font-bold text-center">LLM API Performance Benchmark</h1>
         <AuthStatus />
       </div>
 
