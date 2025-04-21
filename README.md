@@ -65,6 +65,8 @@ This project implements the Express.js Backend approach with a React frontend, p
 
 # Features
 
+The application implements several key features, aligning with the course technical requirements including a React/Tailwind/shadcn frontend, PostgreSQL database, separate frontend/backend architecture, and advanced features like authentication, external API integration, and real-time functionality.
+
 ## User Authentication
 The application supports email-password based authentication using Better Auth. Key capabilities include:
 - Secure user registration and login
@@ -72,38 +74,38 @@ The application supports email-password based authentication using Better Auth. 
 - Password reset functionality
 - Cross-subdomain cookie management for seamless experiences
 
-This authentication system enables personalized measurements while securely recording past results on a per-user basis.
+This authentication system enables personalized measurements while securely recording past results on a per-user basis, fulfilling the **advanced requirement for user authentication and authorization**.
 
 ## API Key Management
 Users can securely store and manage their LLM API provider credentials:
 - Add multiple API vendors with different models
-- Store API keys securely in the database
+- Store API keys securely in the database (**PostgreSQL**, fulfilling the data storage requirement)
 - Edit or remove API keys as needed
 - Group results by vendor for easy comparison
 
 This feature enables users to compare performance across multiple vendors without repeatedly entering credentials.
 
 ## LLM API Performance Measurement
-The application measures key performance metrics directly from the client side:
+The application measures key performance metrics directly from the client side (**React frontend** interacting via **RESTful API** with the **Express.js backend**, fulfilling the chosen architecture requirements):
 - Time to first token (TTFT): Measures initial response latency
 - Tokens per second (TPS): Measures throughput performance
 - Total completion time: Measures end-to-end performance
 - Cost estimation: Calculates approximate costs based on token counts
 
-This implementation meets the course requirement for client-side API interaction while providing accurate timing measurements by minimizing network latency effects.
+This implementation provides accurate timing measurements by minimizing network latency effects and fulfills the **advanced requirement for API integration with external services**. The frontend utilizes **React, Tailwind CSS, and shadcn/ui** as required.
 
 ## Dynamic Streaming Response Visualization
 The application leverages the streaming capabilities of LLM APIs:
 - Real-time token delivery visualization
 - Progressive rendering of responses as they arrive
 - Visual indication of response speed variations
-- Responsive UI that updates as new tokens arrive
+- Responsive UI that updates as new tokens arrive (**React/Tailwind/shadcn**, fulfilling frontend and responsive design requirements)
 
-This feature enhances the user experience by providing immediate feedback and making the application more interactive.
+This feature enhances the user experience by providing immediate feedback, making the application more interactive, and fulfilling the **advanced requirement for real-time functionality**.
 
 ## Historical Performance Analysis
 The system maintains a comprehensive history of benchmark results:
-- Persistent storage of all measurement results
+- Persistent storage of all measurement results in **PostgreSQL**, fulfilling the data storage requirement
 - Statistical aggregation of results by model and vendor
 - Time-series analysis to identify performance trends
 - Exportable results for external analysis
@@ -115,7 +117,7 @@ Measurement data can be exported to a CSV file:
 - Enable custom data analysis
 - Provide a comprehensive data dump
 
-This feature allows users to save critical measurement results for further analysis and share them with others to build a case before committing to a particular API vendor.
+This feature allows users to save critical measurement results for further analysis and share them with others, potentially fulfilling the **advanced requirement for file handling and processing**.
 
 # User Guide
 
