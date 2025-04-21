@@ -151,7 +151,7 @@ From the main dashboard, users can manage their LLM API vendors:
    - Delete unwanted configurations with the trash icon
 
 ## LLM Performance Measurement
-![Performance Measurement](https://example.com/performance-screenshot.png)
+![Performance Measurement](images/measurement.png)
 
 To run a performance benchmark:
 
@@ -165,7 +165,7 @@ To run a performance benchmark:
    - Total response time
 
 ## Managing Measurement Results
-![Results Management](images/measurement.png)
+![Results Management](images/result.png)
 
 The central panel displays all previous benchmark results:
 
